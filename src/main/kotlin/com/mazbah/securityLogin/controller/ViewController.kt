@@ -4,30 +4,31 @@ import com.mazbah.securityLogin.model.User
 import com.mazbah.securityLogin.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
-class ViewController(var userService: UserService, var user: User) {
+@ControllerAdvice
+class ViewController(var userService: UserService) {
 
-    @GetMapping("/", "/login")
-    fun loginPage(): ModelAndView{
-        val modelAndView = ModelAndView()
-        modelAndView.viewName = "login.html"
-        return modelAndView
+
+    @GetMapping(path = ["/","/login"])
+    fun loginPage(): String{
+        return "login.html"
     }
 
-    @GetMapping("/register")
+    @GetMapping(path = ["/register"])
     fun registrationPage():ModelAndView{
         val modelAndView = ModelAndView()
-        modelAndView.addObject("user",user)
+        modelAndView.addObject("user",User())
         modelAndView.viewName = "register.html"
         return modelAndView
     }
 
-    @PostMapping("/register")
+    @PostMapping(path = ["/register"])
     fun createNewUser(user:User, bindingResult: BindingResult,ra: RedirectAttributes):ModelAndView{
         val modelAndView = ModelAndView()
         val userExists:User = userService.findUserByEmail(user.email)
@@ -35,7 +36,7 @@ class ViewController(var userService: UserService, var user: User) {
             bindingResult.rejectValue("email", "error.user", "There is already a user registered with this Email")
         }
 
-        if (!user.password.equals(user.confirmPassword)) {
+        if (!(user.password).equals(user.confirmPassword)) {
             bindingResult.rejectValue("confirmPassword", "error.user", "Password did not matched")
         }
 
@@ -49,11 +50,9 @@ class ViewController(var userService: UserService, var user: User) {
         return modelAndView
     }
 
-    @GetMapping("/home")
-    fun homePage(): ModelAndView {
-        val modelAndView = ModelAndView()
-        modelAndView.viewName = "home.html"
-        return modelAndView
+    @GetMapping(path = ["/home"])
+    fun homePage(): String {
+       return "home.html"
     }
 
 }

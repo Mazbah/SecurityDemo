@@ -7,8 +7,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.stereotype.Service
 import java.util.ArrayList
 
+@Service
 class MyUserDetailsService: UserDetailsService
 {
     @Autowired
@@ -18,9 +20,9 @@ class MyUserDetailsService: UserDetailsService
         var user: User = userService.findUserByEmail(email) ?: throw UsernameNotFoundException("User Not Found")
 
         val roles: MutableSet<GrantedAuthority> = HashSet()
-        for (role in user.roles) {
-            roles.add(SimpleGrantedAuthority(role.toString()))
-        }
+//        for (role in user.roles) {
+//            roles.add(SimpleGrantedAuthority(role.toString()))
+//        }
 
         val grantedAuthorities: List<GrantedAuthority> = ArrayList(roles)
 

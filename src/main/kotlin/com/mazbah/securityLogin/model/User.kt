@@ -21,9 +21,9 @@ data class User(
 
     @Column(name = "active") var active: Boolean? = null,
 
-    @ManyToMany(cascade = [CascadeType.MERGE]) @JoinTable(name = "user_role",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id")])
+//    @ManyToMany(cascade = [CascadeType.MERGE]) @JoinTable(name = "user_role",
+//        joinColumns = [JoinColumn(name = "user_id")],
+//        inverseJoinColumns = [JoinColumn(name = "role_id")])
 
-    var roles: Set<Role>
+   // var roles: List<Role>
 )

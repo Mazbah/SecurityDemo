@@ -16,8 +16,10 @@ class ViewController(var userService: UserService) {
 
 
     @GetMapping(path = ["/","/login"])
-    fun loginPage(): String{
-        return "login.html"
+    fun loginPage(): ModelAndView{
+        val modelAndView = ModelAndView()
+        modelAndView.viewName = "login.html"
+        return modelAndView
     }
 
     @GetMapping(path = ["/register"])
@@ -29,9 +31,9 @@ class ViewController(var userService: UserService) {
     }
 
     @PostMapping(path = ["/register"])
-    fun createNewUser(user:User, bindingResult: BindingResult,ra: RedirectAttributes):ModelAndView{
+    fun createNewUser(user: User, bindingResult: BindingResult,ra: RedirectAttributes): ModelAndView {
         val modelAndView = ModelAndView()
-        val userExists:User = userService.findUserByEmail(user.email)
+        val userExists: User? = userService.findUserByEmail(user.email)
         if (userExists != null) {
             bindingResult.rejectValue("email", "error.user", "There is already a user registered with this Email")
         }
@@ -51,8 +53,10 @@ class ViewController(var userService: UserService) {
     }
 
     @GetMapping(path = ["/home"])
-    fun homePage(): String {
-       return "home.html"
+    fun homePage(): ModelAndView {
+        val modelAndView = ModelAndView()
+        modelAndView.viewName = "/home.html"
+        return modelAndView
     }
 
 }

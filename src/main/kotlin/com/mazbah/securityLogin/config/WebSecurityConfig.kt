@@ -1,5 +1,6 @@
 package com.mazbah.securityLogin.config
 
+import com.mazbah.securityLogin.model.User
 import com.mazbah.securityLogin.service.MyUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -8,15 +9,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.userdetails.User.withUsername
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import javax.sql.DataSource
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig: WebSecurityConfigurerAdapter() {
+class WebSecurityConfig(): WebSecurityConfigurerAdapter() {
 
     @Autowired
-    var userDetailsService: MyUserDetailsService? = null
+    lateinit var userDetailsService: MyUserDetailsService
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -27,7 +30,12 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
         auth.
             userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder())
+//        inMemoryAuthentication()
+//            .withUser("springuser@a.com").password(passwordEncoder().encode("spring123")).roles("USER")
+//            .and()
+//            .withUser("springadmin").password(passwordEncoder().encode("admin123")).roles("ADMIN", "USER");
     }
+
 
     override fun configure(http: HttpSecurity) {
         http.
@@ -40,6 +48,10 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout();
+//            .antMatchers("/", "/login", "/register", "/h2-console/**").hasRole("USER")
+//                .antMatchers("/home").hasRole("USER")
+//            .anyRequest().authenticated().and().formLogin()
+
 
     }
 

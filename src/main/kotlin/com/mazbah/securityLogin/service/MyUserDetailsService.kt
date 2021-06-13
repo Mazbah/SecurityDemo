@@ -9,20 +9,19 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import java.util.ArrayList
+import kotlin.jvm.Throws
 
 @Service
-class MyUserDetailsService: UserDetailsService
+class MyUserDetailsService(private var userService: UserService): UserDetailsService
 {
-    @Autowired
-    lateinit var userService:UserService
 
     override fun loadUserByUsername(email: String): UserDetails {
-        var user: User = userService.findUserByEmail(email) ?: throw UsernameNotFoundException("User Not Found")
+        val user: User = userService.findUserByEmail(email) ?: throw UsernameNotFoundException("User Not Found")
 
         val roles: MutableSet<GrantedAuthority> = HashSet()
-//        for (role in user.roles) {
-//            roles.add(SimpleGrantedAuthority(role.toString()))
-//        }
+        for (role in user.roles) {
+            roles.add(SimpleGrantedAuthority(role.toString()))
+        }
 
         val grantedAuthorities: List<GrantedAuthority> = ArrayList(roles)
 

@@ -11,8 +11,7 @@ import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
-@ControllerAdvice
-class ViewController(var userService: UserService) {
+class ViewController(private var userService: UserService) {
 
 
     @GetMapping(path = ["/","/login"])
@@ -24,7 +23,7 @@ class ViewController(var userService: UserService) {
 
     @GetMapping(path = ["/register"])
     fun registrationPage():ModelAndView{
-        val modelAndView = ModelAndView()
+        val modelAndView:ModelAndView = ModelAndView()
         modelAndView.addObject("user",User())
         modelAndView.viewName = "register.html"
         return modelAndView
@@ -32,7 +31,7 @@ class ViewController(var userService: UserService) {
 
     @PostMapping(path = ["/register"])
     fun createNewUser(user: User, bindingResult: BindingResult,ra: RedirectAttributes): ModelAndView {
-        val modelAndView = ModelAndView()
+        val modelAndView:ModelAndView = ModelAndView()
         val userExists: User? = userService.findUserByEmail(user.email)
         if (userExists != null) {
             bindingResult.rejectValue("email", "error.user", "There is already a user registered with this Email")
@@ -54,7 +53,7 @@ class ViewController(var userService: UserService) {
 
     @GetMapping(path = ["/home"])
     fun homePage(): ModelAndView {
-        val modelAndView = ModelAndView()
+        val modelAndView:ModelAndView = ModelAndView()
         modelAndView.viewName = "/home.html"
         return modelAndView
     }

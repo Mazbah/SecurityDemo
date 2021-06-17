@@ -1,6 +1,7 @@
 package com.mazbah.securityLogin.model
 
-import com.sun.istack.NotNull
+
+import org.jetbrains.annotations.NotNull
 import javax.persistence.*
 
 @Entity
@@ -15,9 +16,9 @@ data class User(
 
     @NotNull @Transient @Column(name = "confirmPassword") var confirmPassword: String? = null,
 
-    @Column(name = "active") var active: Boolean? = null,
+    @Column(name = "active") var active: Boolean? = false,
 
     @ManyToMany(cascade = [CascadeType.MERGE]) @JoinTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "role_id")])
 
-    var roles: Set<Role> = emptySet()
+    var roles: Set<Role?> = HashSet()
 )
